@@ -1,0 +1,17 @@
+<div *ngIf="user$ | async as user">
+
+  <button *ngIf="!user.uid" (click)="googleLogin()">Login</button>
+  <div *ngIf="user.loading">
+    loading
+  </div>
+  <h1> {{ user.displayName }} </h1>
+  <h1> {{ user.uid }} </h1>
+
+  <div *ngIf="user.uid">
+    <button (click)="logout()">LogOut</button>
+  </div>
+
+  <p *ngIf="user.error" style="color: red">
+    {{ user.error }}
+  </p>
+</div>

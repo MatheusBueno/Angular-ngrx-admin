@@ -9,7 +9,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 
 import * as firebase from 'firebase';
-import { reducers } from '../reducers';
 
 export type Action = userActions.All;
 
@@ -20,22 +19,22 @@ export class UserEffects {
     private afAuth: AngularFireAuth,
   ) { }
 
-  @Effect()
-  getUser: Observable<Action> = this.actions$
-    .pipe(
-      ofType(userActions.GET_USER),
-      map((action: userActions.GetUser) => action.payload),
-      mergeMap(_ => this.afAuth.authState),
-      map(authData => {
-        if (authData) {
-          const user = new User(authData.uid, authData.displayName);
-          return new userActions.Authenticated(user);
-        } else {
-          return new userActions.NotAuthenticated();
-        }
-      }),
-      catchError(err => of(new userActions.AuthError({ error: err.message }))),
-    );
+  // @Effect()
+  // getUser: Observable<Action> = this.actions$
+  //   .pipe(
+  //     ofType(userActions.GET_USER),
+  //     map((action: userActions.GetUser) => action.payload),
+  //     mergeMap(_ => this.afAuth.authState),
+  //     map(authData => {
+  //       if (authData) {
+  //         const user = new User(authData.uid, authData.displayName);
+  //         return new userActions.Authenticated({ user: user });
+  //       } else {
+  //         return new userActions.NotAuthenticated();
+  //       }
+  //     }),
+  //     catchError(err => of(new userActions.AuthError({ error: err.message }))),
+  //   );
 
   @Effect()
   loginWithGoogle: Observable<Action> = this.actions$
@@ -43,7 +42,14 @@ export class UserEffects {
       ofType(userActions.GOOGLE_LOGIN),
       map((action: userActions.GoogleLogin) => action.payload),
       mergeMap(_ => from(this.googleLogin())),
-      map(credential => new userActions.GetUser()),
+      map((credential: firebase.auth.UserCredential) => {
+        if (credential) {
+          const user = new User(credential.user.uid, credential.user.displayName);
+          return new userActions.Authenticated({ user: user });
+        } else {
+          return new userActions.NotAuthenticated();
+        }
+      }),
       catchError(err => of(new userActions.AuthError({ error: err.message })))
     );
 

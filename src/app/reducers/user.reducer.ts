@@ -3,10 +3,18 @@ import { User } from '../models/user.model';
 
 export type Action = userActions.All;
 
-const defaultState = new User(null, `Bueno`);
+export interface State {
+  user: User | null;
+  loading: boolean;
+}
 
-export function userReducer(
-  state: User = defaultState,
+export const defaultState = {
+  user: null,
+  loading: false,
+};
+
+export function reducer(
+  state: State = defaultState,
   action: Action) {
   switch (action.type) {
     case userActions.GET_USER:
@@ -19,7 +27,7 @@ export function userReducer(
       return { ...state, ...defaultState, loading: false };
 
     case userActions.GOOGLE_LOGIN:
-      return { ...state, loading: false };
+      return { ...state, loading: true };
 
     case userActions.AUTH_ERROR:
       return { ...state, ...action.payload, loading: false };
@@ -28,6 +36,10 @@ export function userReducer(
       return { ...state, ...action.payload, loading: true };
 
     default:
-      break;
+      return state;
   }
 }
+
+export const selectCurrentUser = (state: State) => state.user;
+
+export const selectLoadingAuth = (state: State) => state.loading;

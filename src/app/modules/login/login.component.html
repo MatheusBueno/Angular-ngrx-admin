@@ -1,17 +1,73 @@
-<div *ngIf="user$ | async as user">
+<div class="container">
 
-  <button *ngIf="!user.uid" (click)="googleLogin()">Login</button>
-  <div *ngIf="user.loading">
-    loading
+  <div *ngIf="user$ | async as user">
+
+    <div *ngIf="user.loading">
+      loading
+    </div>
+    <h1> {{ user.displayName }} </h1>
+    <h1> {{ user.uid }} </h1>
+
+    <div *ngIf="user.uid">
+      <button class="btn waver-effect red" (click)="logout()">LogOut</button>
+    </div>
+
+    <p *ngIf="user.error red-text">
+      {{ user.error }}
+    </p>
   </div>
-  <h1> {{ user.displayName }} </h1>
-  <h1> {{ user.uid }} </h1>
 
-  <div *ngIf="user.uid">
-    <button (click)="logout()">LogOut</button>
+  <button class="btn waves-effect blue" *ngIf="(isLoading$ | async) || !(user$ | async)"
+    (click)="googleLogin()">Login</button>
+
+  <div class="preloader-wrapper big active" *ngIf="(isLoading$ | async)">
+    <div class="spinner-layer spinner-blue">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div>
+      <div class="gap-patch">
+        <div class="circle"></div>
+      </div>
+      <div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+
+    <div class="spinner-layer spinner-red">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div>
+      <div class="gap-patch">
+        <div class="circle"></div>
+      </div>
+      <div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+
+    <div class="spinner-layer spinner-yellow">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div>
+      <div class="gap-patch">
+        <div class="circle"></div>
+      </div>
+      <div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+
+    <div class="spinner-layer spinner-green">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div>
+      <div class="gap-patch">
+        <div class="circle"></div>
+      </div>
+      <div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
   </div>
 
-  <p *ngIf="user.error" style="color: red">
-    {{ user.error }}
-  </p>
 </div>

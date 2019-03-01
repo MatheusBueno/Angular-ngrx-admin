@@ -3,11 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import * as userActions from '../../actions/user.actions';
 import { User } from 'src/app/models/user.model';
 import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-
-interface AppState {
-  user: User;
-}
+import { Store, select } from '@ngrx/store';
+import * as fromUser from '../../reducers';
 
 @Component({
   selector: 'app-login',
@@ -18,14 +15,21 @@ export class LoginComponent implements OnInit {
 
   public user$: Observable<User>;
 
+  public isLoading$: Observable<boolean>;
+
   constructor(
-    private store: Store<AppState>
+    private store: Store<fromUser.State>
   ) { }
 
   ngOnInit() {
-    this.user$ = this.store.select(`user`);
+    this.user$ = this.store.pipe(
+      select(fromUser.selectGetCurrentUser)
+    );
 
-    this.store.dispatch(new userActions.GetUser());
+    this.isLoading$ = this.store
+      .pipe(
+        select(fromUser.selectIsLoadingAuth)
+      );
   }
 
   googleLogin() {

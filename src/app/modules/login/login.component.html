@@ -1,73 +1,30 @@
-<div class="container">
+<section>
+  <div class="content">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
 
-  <div *ngIf="user$ | async as user">
+      <div class="input-field">
+        <span class="entypo-user inputIcon">
+          <i class="fa fa-user"></i>
+        </span>
+        <input type="text" class="user" placeholder="Email" formControlName="email" />
+        <ng-container *ngIf="email.errors && email.touched">
+          <p class="red-text" *ngIf="email.errors.required"> Email é requerido</p>
+          <p class="red-text" *ngIf="email.errors.email"> Email inválido</p>
+        </ng-container>
+      </div>
 
-    <div *ngIf="user.loading">
-      loading
-    </div>
-    <h1> {{ user.displayName }} </h1>
-    <h1> {{ user.uid }} </h1>
-
-    <div *ngIf="user.uid">
-      <button class="btn waver-effect red" (click)="logout()">LogOut</button>
-    </div>
-
-    <p *ngIf="user.error red-text">
-      {{ user.error }}
-    </p>
+      <div class="input-field">
+        <span class="entypo-key inputIcon">
+          <i class="fa fa-key"></i>
+        </span>
+        <input type="password" class="pass" placeholder="Senha" formControlName="password" />
+        <ng-container *ngIf="password.errors && password.touched">
+          <p class="red-text" *ngIf="password.errors.required"> Senha é requerida.</p>
+          <p class="red-text" *ngIf="password.errors.minlength"> Senha deve ter ao menos
+            {{ password.errors.minlength.requiredLength }} caracteres.</p>
+        </ng-container>
+      </div>
+      <button class="submit-button" type="submit">Login</button>
+    </form>
   </div>
-
-  <button class="btn waves-effect blue" *ngIf="(isLoading$ | async) || !(user$ | async)"
-    (click)="googleLogin()">Login</button>
-
-  <div class="preloader-wrapper big active" *ngIf="(isLoading$ | async)">
-    <div class="spinner-layer spinner-blue">
-      <div class="circle-clipper left">
-        <div class="circle"></div>
-      </div>
-      <div class="gap-patch">
-        <div class="circle"></div>
-      </div>
-      <div class="circle-clipper right">
-        <div class="circle"></div>
-      </div>
-    </div>
-
-    <div class="spinner-layer spinner-red">
-      <div class="circle-clipper left">
-        <div class="circle"></div>
-      </div>
-      <div class="gap-patch">
-        <div class="circle"></div>
-      </div>
-      <div class="circle-clipper right">
-        <div class="circle"></div>
-      </div>
-    </div>
-
-    <div class="spinner-layer spinner-yellow">
-      <div class="circle-clipper left">
-        <div class="circle"></div>
-      </div>
-      <div class="gap-patch">
-        <div class="circle"></div>
-      </div>
-      <div class="circle-clipper right">
-        <div class="circle"></div>
-      </div>
-    </div>
-
-    <div class="spinner-layer spinner-green">
-      <div class="circle-clipper left">
-        <div class="circle"></div>
-      </div>
-      <div class="gap-patch">
-        <div class="circle"></div>
-      </div>
-      <div class="circle-clipper right">
-        <div class="circle"></div>
-      </div>
-    </div>
-  </div>
-
-</div>
+</section>

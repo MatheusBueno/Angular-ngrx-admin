@@ -1,42 +1,55 @@
 import {
-  ActionReducer,
   ActionReducerMap,
   createFeatureSelector,
   createSelector,
-  MetaReducer
 } from '@ngrx/store';
-import { environment } from '../../environments/environment';
 
-import * as fromUser from './user.reducer';
+import * as fromAuth from '../reducers/auth.reduce';
+import * as fromLoading from '../reducers/loading.reducer';
 
 /**
- * Export a state interface this wih build a state in storeModule.
+ * App State Interface.
+ * Without features States.
  */
 export interface State {
-  user: fromUser.State,
+  auth: fromAuth.State,
+  loadingComponent: fromLoading.State,
 };
 
-
 /**
- * Export each reducer in application.
+ * App Reducers.
  */
 export const reducers: ActionReducerMap<State> = {
-  user: fromUser.reducer,
+  auth: fromAuth.reducer,
+  loadingComponent: fromLoading.reducer,
 };
 
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
+
+// Get auth State.
+const getAthState = createFeatureSelector<fromAuth.State>('auth');
+
+// Get Loading Component State
+const getLoadingComponentState = createFeatureSelector<fromLoading.State>('loadingComponent');
+
 
 /**
- * Selectos for user State
- * Get current user in User State
+ * Selector to get Auth State.
+ * Return a user case authenticated.
  */
-export const getUserState = createFeatureSelector<fromUser.State>(`user`);
-export const selectGetCurrentUser = createSelector(
-  getUserState,
-  fromUser.selectCurrentUser
+export const selectAuth = createSelector(
+  getAthState,
+  fromAuth.getUser,
 );
 
-export const selectIsLoadingAuth = createSelector(
-  getUserState,
-  fromUser.selectLoadingAuth
+export const selectToken = createSelector(
+  getAthState,
+  fromAuth.getToken,
+);
+
+/**
+ * Return state to show or hide loading component.
+ */
+export const selectIsShowLoadingComponent = createSelector(
+  getLoadingComponentState,
+  fromLoading.getShowCompoennt,
 );

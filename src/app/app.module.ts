@@ -10,31 +10,32 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
-import { reducers } from './reducers';
 
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { UserEffects } from './effects/user.effects';
+import { reducers } from './reducers';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
-    LoginModule,
     AppRoutingModule,
 
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
 
-    EffectsModule.forRoot([
-      UserEffects,
-    ]),
+    // EffectsModule.forRoot([
+    //   UserEffects,
+    // ]),
     StoreModule.forRoot(reducers),
 
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    LoginModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

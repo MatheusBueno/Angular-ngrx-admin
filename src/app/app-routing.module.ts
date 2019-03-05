@@ -11,7 +11,11 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-  }
+  },
+  {
+    path: `admin`,
+    loadChildren: `./modules/dashboard/dashboard.module#DashboardModule`,
+  },
 ];
 
 @NgModule({
